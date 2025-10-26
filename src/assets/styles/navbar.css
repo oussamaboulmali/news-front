@@ -1,0 +1,17 @@
+.disconnct {
+  float: right;
+  margin-right: 10px;
+}
+.disconnct button {
+  display: flex;
+  grid-gap: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  align-items: center;
+  text-decoration: none;
+}
+
+.locationLink:hover {
+  font-weight: bold;
+}

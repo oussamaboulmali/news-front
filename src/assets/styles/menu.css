@@ -1,0 +1,365 @@
+/* Styles existants */
+/* Main container takes up the full height */
+.main-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.content-container {
+  margin-left: 250px;
+  padding: 0;
+  width: calc(100% - 200px);
+  display: flex;
+  flex-direction: column;
+}
+.content-container-small {
+  margin-left: 100px;
+  padding: 0;
+  width: calc(100% - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar {
+  width: 230px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #263949;
+  color: white;
+  padding: 8px;
+}
+
+.sidebarSmall {
+  width: 80px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #263949;
+  color: white;
+  padding: 8px;
+}
+
+/* Navbar fixed en haut */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 245px;
+  right: 0;
+  height: 50px;
+  background-color: #263949;
+  color: white;
+  padding: 10px 20px;
+  z-index: 999;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbarSmall {
+  position: fixed;
+  top: 0;
+  left: 95px;
+  right: 0;
+  height: 50px;
+  background-color: #263949;
+  color: white;
+  padding: 10px 20px;
+  z-index: 999;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* UnderNavBar lorsqu'une barre latérale est ouverte */
+.underNavBar {
+  position: fixed;
+  top: 70px;
+  left: 247px;
+  right: 0;
+  height: 20px;
+  background-color: white;
+  color: #0f0f0f;
+  padding: 10px 20px;
+  z-index: 998;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid #b9c1c9;
+}
+
+/* UnderNavBar lorsqu'une barre latérale est fermée */
+.underNavBarSmall {
+  position: fixed;
+  top: 70px;
+  left: 97px;
+  right: 0;
+  height: 20px;
+  background-color: white;
+  color: #263949;
+  padding: 10px 20px;
+  z-index: 998;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Content qui peut défiler, prenant tout l'espace restant sous la navbar */
+.content {
+  margin-top: 90px;
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: calc(100vh -70px - 150px);
+  background-color: #eee9e9;
+  padding: 50px 30px 30px;
+}
+
+/* Footer qui reste en bas */
+.footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background-color: #fff !important;
+  border-top: 1px solid #e7eaec;
+  color: #363636;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(100%-230px);
+  font-size: 13px !important;
+  font-weight: 500;
+}
+
+/* Footer qui reste en bas */
+.footerSmall {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background-color: #fff !important;
+  border-top: 1px solid #e7eaec;
+  color: #363636;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(100%-230px);
+}
+
+/*CSS pour le direction RLT*/
+
+html[dir="rtl"] .main-container {
+  flex-direction: row-reverse !important; /* Inverse l'ordre des éléments pour RTL */
+}
+
+html[dir="rtl"] .main-container {
+  flex-direction: row-reverse; /* Inverse l'ordre des éléments pour RTL */
+}
+/* Inverser les marges et alignements pour rtl */
+html[dir="rtl"] .content-container {
+  margin-left: 0;
+  margin-right: 250px;
+  content: "Texte inséré avant, avec du CSS";
+}
+html[dir="rtl"] .content-container-small {
+  margin-left: 0;
+  margin-right: 100px;
+}
+
+html[dir="rtl"] .sidebar {
+  left: auto;
+  right: 0;
+}
+
+html[dir="rtl"] .sidebarSmall {
+  left: auto;
+  right: 0;
+}
+
+html[dir="rtl"] .navbar {
+  left: 0;
+  right: 245px;
+}
+
+html[dir="rtl"] .navbarSmall {
+  left: 0;
+  right: 95px;
+}
+
+html[dir="rtl"] .underNavBar {
+  left: 0;
+  right: 247px;
+}
+
+html[dir="rtl"] .underNavBarSmall {
+  left: 0;
+  right: 97px;
+}
+
+/* Footer qui reste en bas */
+html[dir="rtl"] .footerSmall {
+  z-index: -5;
+}
+
+/* Styles pour le menu mobile */
+.mobile-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* Navbar mobile */
+.navbar-mobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background-color: #263949;
+  color: white;
+  padding: 10px 20px;
+  z-index: 999;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Icône du menu avec animation sur mobile */
+.menu-toggle-icon {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-open .menu-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* UnderNavBar mobile */
+.underNavBar-mobile {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background-color: white;
+  color: #0f0f0f;
+  padding: 10px 20px;
+  z-index: 998;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid #b9c1c9;
+}
+
+/* Sidebar mobile qui apparaît sous la navbar avec animation */
+.mobile-sidebar-wrapper {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  max-height: calc(
+    100vh - 90px - 40px
+  ); /* Viewport height - (navbar + underNavBar) - footer */
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #263949;
+  z-index: 997;
+  border-bottom: 1px solid #b9c1c9;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.3s ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ajustements pour le sidebar en mobile */
+.mobile-sidebar-wrapper .sidebar {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+  max-height: 70vh;
+}
+
+/* Content mobile */
+.content-mobile {
+  margin-top: 70px;
+  padding: 16px;
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: #eee9e9;
+  min-height: calc(100vh - 120px - 40px);
+  transition: margin-top 0.3s ease;
+}
+
+/* Footer mobile */
+.footer-mobile {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background-color: #fff !important;
+  border-top: 1px solid #e7eaec;
+  color: #363636;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 13px !important;
+  font-weight: 500;
+}
+
+/* Ajustements pour le sidebar */
+.mobile-sidebar-wrapper .sidebar ul,
+.mobile-sidebar-wrapper .sidebarSmall ul {
+  margin: 10px 0 !important;
+}
+
+/* Style pour les liens de localisation sur mobile */
+.underNavBar-mobile .locationLink {
+  color: #55b4e5;
+  font-weight: 500;
+}
+
+/* Style pour que le sidebar prenne toute la largeur sur mobile */
+.mobile-sidebar-wrapper .sidebar,
+.mobile-sidebar-wrapper .sidebarSmall {
+  width: 100%;
+  position: relative;
+  top: 0;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 50px 16px;
+  }
+
+  /* Ajustement des marges pour le contenu mobile quand le sidebar est ouvert */
+  .mobile-layout.sidebar-open .content-mobile {
+    margin-top: calc(
+      120px + 200px
+    ); /* navbar + underNavBar + hauteur min du sidebar */
+  }
+}

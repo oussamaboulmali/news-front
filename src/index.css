@@ -1,0 +1,111 @@
+:root {
+  --primary-light: #4f6781;
+  --primary-main: #263949;
+  --primary-dark: #1b2a38;
+  --secondery-light: #f5f5f5;
+  --secondery-main: #eee9e9;
+  --secondery-dark: #d6cfcf;
+  --white: #fff;
+  --error: #e53935;
+  --success: #388e3c;
+  --green: #55b4e5;
+}
+
+/* Style pour les navigateurs basés sur WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* Largeur de la barre de défilement verticale */
+  height: 10px; /* Hauteur de la barre de défilement horizontale */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bdbfc0; /* Couleur du curseur */
+  border-radius: 5px; /* Coins arrondis */
+  border: 2px solid #ecf0f1; /* Ajout d'un bord pour séparer le fond */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #bdbfc0; /* Couleur au survol */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ecf0f1; /* Couleur de la piste (track) */
+  border-radius: 5px; /* Coins arrondis pour la piste */
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: #bdc3c7; /* Couleur au survol */
+}
+
+/* Style pour Firefox */
+* {
+  scrollbar-width: thin; /* Taille fine de la barre */
+  scrollbar-color: #bdbfc0 #ecf0f1; /* Couleurs du curseur et de la piste */
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+.dialogTitle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialogTitle p {
+  font-size: 18px;
+  font-weight: 500;
+  margin-left: 10px;
+}
+
+.content-editable {
+  border: none;
+  padding: 5px;
+  outline: none; /* Pour enlever le contour bleu de focus par défaut */
+  text-align: start;
+  width: 100%;
+}
+
+.content-editable:hover {
+  background-color: none;
+  border-radius: 5px;
+  border: 1px solid var(--primary-light);
+  color: black;
+  width: fit-content;
+  font-weight: bold;
+  text-align: start;
+  padding: 5px;
+  /* background-image: url("../images/editer.png");
+  background-repeat: no-repeat;
+  background-position: right center; */
+  background-size: 16px;
+  padding-right: 28px;
+}
+
+.content-editable:focus {
+  background-color: none;
+  border-radius: 5px;
+  border: 1px solid var(--primary-light);
+  font-weight: bold;
+  padding: 5px;
+  color: black;
+  width: fit-content;
+  text-align: start;
+  background-image: none;
+  padding-right: 20px;
+}
