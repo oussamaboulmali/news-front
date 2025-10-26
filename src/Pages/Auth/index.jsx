@@ -1,3 +1,31 @@
+/**
+ * Login Page Component
+ * 
+ * Handles user authentication with the following features:
+ * - Username and password validation
+ * - SQL injection detection
+ * - Session management (handles concurrent sessions)
+ * - Password visibility toggle
+ * - Responsive design (mobile and desktop)
+ * - Encrypted credential storage
+ * - Security logging for suspicious activities
+ * 
+ * Security Features:
+ * - Input sanitization and validation
+ * - SQL injection detection
+ * - Password strength validation (6-20 characters)
+ * - Automatic blocking on suspicious activities
+ * - Encrypted localStorage for credentials
+ * 
+ * @component
+ * @requires @mui/material - UI components
+ * @requires react-toastify - Toast notifications
+ * @requires crypto-js - Encryption for secure storage
+ * 
+ * @example
+ * <Login />
+ */
+
 import {
   Box,
   Button,
@@ -150,9 +178,28 @@ const Login = () => {
     clearData();
   };
 
+  /**
+   * Handles login form submission with security validation
+   * 
+   * Performs the following checks:
+   * 1. SQL injection detection on username and password
+   * 2. Password length validation (6-20 characters)
+   * 3. Logs suspicious activity attempts
+   * 4. Triggers authentication request
+   * 
+   * @function handleLogin
+   * @param {Event} event - Form submission event
+   * @returns {void}
+   * 
+   * @security
+   * - Detects and logs SQL injection attempts
+   * - Validates password constraints
+   * - Blocks IP on malicious input detection
+   */
   const handleLogin = (event) => {
     event.preventDefault();
 
+    // Security validation: Check for SQL injection and password constraints
     if (
       !Gfunc.detectSQLInjection(username) &&
       !Gfunc.detectSQLInjection(password) &&
@@ -165,6 +212,7 @@ const Login = () => {
         setErrorMessage("Username or password incorrect");
         return;
       } else {
+        // Log security violation attempt
         log.error(
           `Une tentative de saisie de balises HTML ou d'injection SQL dans le formulaire d'authentification.
           Informations de débogage :
