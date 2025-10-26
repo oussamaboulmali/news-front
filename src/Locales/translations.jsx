@@ -1,4 +1,40 @@
+/**
+ * @fileoverview Multi-language Translation Strings
+ * 
+ * Contains all UI text translations for Arabic, French, and English
+ * Supports RTL (Arabic) and LTR (French/English) layouts
+ * 
+ * @module Locales/translations
+ */
+
+/**
+ * Current year for copyright notices
+ * @constant {number}
+ */
 const currentYear = new Date().getFullYear();
+
+/**
+ * Translation object containing all supported languages
+ * 
+ * Language codes:
+ * - fr: French (LTR) - Language ID: 2
+ * - ar: Arabic (RTL) - Language ID: 1
+ * - en: English (LTR) - Language ID: 3
+ * 
+ * @constant {Object}
+ * @property {Object} fr - French translations
+ * @property {Object} ar - Arabic translations  
+ * @property {Object} en - English translations
+ * 
+ * @example
+ * import translations from './Locales/translations';
+ * 
+ * const lang = translations['fr'];
+ * console.log(lang.logout); // "Déconnexion"
+ * 
+ * const langAr = translations['ar'];
+ * console.log(langAr.logout); // "تسجيل الخروج"
+ */
 const translations = {
   fr: {
     logout: "Déconnexion",

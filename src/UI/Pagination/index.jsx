@@ -1,3 +1,12 @@
+/**
+ * @fileoverview Pagination Component
+ * 
+ * A reusable pagination component that provides navigation between pages
+ * with RTL/LTR support based on the selected language
+ * 
+ * @module UI/Pagination
+ */
+
 import React, { useContext } from "react";
 import { Icon } from "@mdi/react";
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
@@ -6,6 +15,27 @@ import PropTypes from "prop-types";
 import { ContextProvider } from "../../Context/contextProvider";
 import * as Gfunc from "../../helpers/Gfunc";
 
+/**
+ * Pagination component for navigating between pages
+ * Supports RTL (Arabic) and LTR (French/English) layouts
+ * 
+ * @component
+ * @param {Object} props - Component props
+ * @param {number} props.currentPage - Current active page number (1-indexed)
+ * @param {number} props.totalPages - Total number of pages
+ * @param {Function} props.onPrev - Callback function when previous button is clicked
+ * @param {Function} props.onNext - Callback function when next button is clicked
+ * 
+ * @returns {JSX.Element} Pagination component
+ * 
+ * @example
+ * <Pagination
+ *   currentPage={1}
+ *   totalPages={10}
+ *   onPrev={() => setPage(page - 1)}
+ *   onNext={() => setPage(page + 1)}
+ * />
+ */
 const Pagination = ({ currentPage, totalPages, onPrev, onNext }) => {
   const { lang, prefixe, secretKey } = useContext(ContextProvider);
   const isRTL =

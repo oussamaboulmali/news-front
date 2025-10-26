@@ -1,3 +1,19 @@
+/**
+ * @fileoverview Main Application Component
+ * 
+ * This is the root component of the News Dashboard application.
+ * It handles:
+ * - Authentication and session management
+ * - Dynamic route generation based on user permissions
+ * - Multi-language support (Arabic RTL, French, English)
+ * - Theme provider setup
+ * - Global context provider
+ * 
+ * @module App
+ * @requires react-router-dom
+ * @requires @mui/material
+ */
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -31,15 +47,37 @@ import { prefixer } from "stylis";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
+/**
+ * Cache configuration for RTL (Right-to-Left) language support
+ * Used for Arabic language interface
+ */
 const cacheRtl = createCache({
   key: "muirtl",
   stylisPlugins: [prefixer, rtlPlugin],
 });
+
+/**
+ * Cache configuration for LTR (Left-to-Right) language support
+ * Used for French and English interfaces
+ */
 const cacheLtr = createCache({
   key: "muiltr",
   stylisPlugins: [],
 });
 
+/**
+ * Main Application Component
+ * 
+ * Manages the entire application lifecycle including:
+ * - User authentication state
+ * - Dynamic menu/route generation based on user permissions
+ * - Language switching (AR/FR/EN) with RTL/LTR support
+ * - API calls for user menu permissions
+ * - Global context management
+ * 
+ * @component
+ * @returns {JSX.Element} The main application with routing
+ */
 function App() {
   const baseUrl =
     import.meta.env.VITE_APP_STATUS === "prod"
@@ -65,6 +103,18 @@ function App() {
     body: {},
   });
 
+  /**
+   * Handles language switching and sets document direction (RTL/LTR)
+   * Retrieves language preference from encrypted localStorage
+   * 
+   * Language codes:
+   * - "1": Arabic (RTL)
+   * - "2": French (LTR)
+   * - "3": English (LTR)
+   * 
+   * @function handleChangeLanguage
+   * @returns {void}
+   */
   const handleChangeLanguage = () => {
     const lang = Gfunc.useDecryptedLocalStorage("langId" + prefixe, secretKey);
     document.documentElement.setAttribute("dir", lang === "1" ? "rtl" : "ltr");
@@ -77,7 +127,10 @@ function App() {
     );
   };
 
-  //track l'affichage de home page
+  /**
+   * Effect hook to fetch user menu and initialize language on login
+   * Runs when user logs in and menu data hasn't been loaded yet
+   */
   useEffect(() => {
     if (isLogged && !response) {
       fetchData();
@@ -85,16 +138,32 @@ function App() {
     }
   }, [isLogged, response]);
 
+  /**
+   * Callback to update login state after successful authentication
+   * 
+   * @function handleValidateLogin
+   * @returns {void}
+   */
   const handleValidateLogin = () => {
     setIsLogged(true);
   };
 
+  /**
+   * Handles user logout by clearing states and cached data
+   * 
+   * @function handleDisconnect
+   * @returns {void}
+   */
   const handleDisconnect = () => {
     setIsLogged(false);
     clearData();
   };
 
-  //modifier le menu pour afficher toutes les routes possibles
+  /**
+   * Effect hook to build dynamic routes based on user permissions
+   * Processes the menu response from API and creates route configurations
+   * Handles different menu item types (simple pages vs. agency-based pages)
+   */
   useEffect(() => {
     const fetchRoutes = async () => {
       if (response && response?.data?.success) {
@@ -206,6 +275,18 @@ function App() {
     fetchRoutes();
   }, [response]);
 
+  /**
+   * Dynamically imports and returns a page component based on key
+   * Uses dynamic imports for code splitting
+   * 
+   * @async
+   * @function DynamicComponent
+   * @param {string} key - Page/component key (matches folder name in Pages directory)
+   * @returns {Promise<JSX.Element|null>} React component or null if import fails
+   * 
+   * @example
+   * const component = await DynamicComponent("Utilisateurs");
+   */
   const DynamicComponent = async (key) => {
     try {
       const module = await import(`./Pages/${key}/index.jsx`);
@@ -216,6 +297,13 @@ function App() {
     }
   };
 
+  /**
+   * Clears route cache to force menu reload
+   * Used when user permissions change
+   * 
+   * @function updateRoutes
+   * @returns {void}
+   */
   const updateRoutes = () => {
     clearData();
   };
