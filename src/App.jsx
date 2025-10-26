@@ -1,3 +1,28 @@
+/**
+ * Main Application Component
+ * 
+ * This is the root component that handles:
+ * - Application routing and navigation
+ * - User authentication flow
+ * - Dynamic menu/route generation based on user permissions
+ * - Multi-language support (Arabic RTL, French, English)
+ * - Theme and styling configuration
+ * - Global context provision
+ * 
+ * Architecture:
+ * - Uses React Router for client-side routing
+ * - Implements protected routes (requires authentication)
+ * - Dynamically imports page components based on user permissions
+ * - Supports RTL/LTR layout switching for i18n
+ * - Provides global context for shared state
+ * 
+ * @module App
+ * @requires react-router-dom - Routing functionality
+ * @requires @mui/material - UI components and theming
+ * @requires react-toastify - Toast notifications
+ * @requires @emotion/react - CSS-in-JS with RTL support
+ */
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -31,43 +56,88 @@ import { prefixer } from "stylis";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
+// Emotion cache configuration for RTL (Right-to-Left) support
+// Used for Arabic language interface
 const cacheRtl = createCache({
   key: "muirtl",
   stylisPlugins: [prefixer, rtlPlugin],
 });
+
+// Emotion cache configuration for LTR (Left-to-Right) support  
+// Used for French and English language interfaces
 const cacheLtr = createCache({
   key: "muiltr",
   stylisPlugins: [],
 });
 
+/**
+ * Main App Component
+ * 
+ * Manages the entire application lifecycle including authentication,
+ * routing, localization, and global state.
+ * 
+ * @component
+ * @returns {JSX.Element} The root application component
+ */
 function App() {
+  // Environment-based API URL configuration
+  // In production: uses relative path "/api/v1/"
+  // In development: uses full URL from .env
   const baseUrl =
     import.meta.env.VITE_APP_STATUS === "prod"
       ? "/api/v1/"
       : import.meta.env.VITE_BASE_URL;
+  
+  // Image URL configuration
   const ImageUrl =
     import.meta.env.VITE_APP_STATUS === "prod"
       ? ""
       : import.meta.env.VITE_IMAGE_URL;
+  
+  // Configuration for empty data handling
   const emptyData = import.meta.env.VITE_EMPTY_DATA;
+  
+  // Prefix for localStorage keys (security/multi-tenant support)
   const prefixe = import.meta.env.VITE_PREF;
+  
+  // Secret key for AES encryption/decryption
   const secretKey = import.meta.env.VITE_KEY;
+  
+  // Authentication state - retrieved from encrypted localStorage
   const [isLogged, setIsLogged] = useState(
     JSON.parse(Gfunc.useDecryptedLocalStorage("isLogged" + prefixe, secretKey))
   );
+  
+  // Dynamic routes based on user permissions
   const [routes, setRoutes] = useState([]);
+  
+  // Current language translations
   const [lang, setLang] = useState();
 
-  //useAxios pour recuperer la liste de menu des utilisateurs
+  // Fetch user's menu/routes based on their permissions
+  // This determines which pages and features the user can access
   const { response, loading, error, fetchData, clearData } = useAxios({
     method: "post",
     url: baseUrl + "users/menu",
     body: {},
   });
 
+  /**
+   * Handles language change and direction (RTL/LTR) switching
+   * 
+   * Language IDs:
+   * - 1: Arabic (RTL)
+   * - 2: French (LTR)
+   * - 3: English (LTR)
+   * 
+   * @function handleChangeLanguage
+   * @returns {void}
+   */
   const handleChangeLanguage = () => {
     const lang = Gfunc.useDecryptedLocalStorage("langId" + prefixe, secretKey);
+    // Set document direction for proper RTL/LTR rendering
     document.documentElement.setAttribute("dir", lang === "1" ? "rtl" : "ltr");
+    // Load appropriate translations
     setLang(
       lang === "1"
         ? translations["ar"]

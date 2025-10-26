@@ -1,10 +1,41 @@
+/**
+ * Global Helper Functions Module
+ * 
+ * This module provides a comprehensive set of utility functions used throughout the application.
+ * Functions include:
+ * - Authentication and session management
+ * - Data validation and sanitization (email, phone, SQL injection)
+ * - String formatting and transformation
+ * - Date and time manipulation
+ * - Security utilities (encryption/decryption, XSS prevention)
+ * - Array and object manipulation
+ * 
+ * @module helpers/Gfunc
+ * @requires axios - HTTP client for API requests
+ * @requires crypto-js - Encryption library for secure data storage
+ * @requires react-toastify - Toast notifications for user feedback
+ */
+
 import { mdiAlertCircleOutline } from "@mdi/js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import CryptoJS from "crypto-js";
 import * as Gfunc from "../helpers/Gfunc";
 
-//une fonction local pour la deconnexion .
+/**
+ * Logs out the user by clearing session cookies and local storage
+ * 
+ * This function performs a complete logout operation:
+ * 1. Sends logout request to backend API
+ * 2. Clears all local storage data
+ * 3. Clears all session storage data
+ * 4. Redirects user to login page
+ * 
+ * @async
+ * @function LougoutCoookiesSession
+ * @returns {Promise<void>}
+ * @throws {Error} If logout request fails, still proceeds with local cleanup
+ */
 const LougoutCoookiesSession = async () => {
   try {
     await axios.post(
@@ -35,7 +66,19 @@ const LougoutCoookiesSession = async () => {
   }
 };
 
-//une fonction pour traiter si l'utilisateur n'a pas session
+/**
+ * Handles errors when user session is invalid or expired
+ * 
+ * Displays an error toast notification and automatically logs out the user
+ * after 5 seconds. User can also click the toast to logout immediately.
+ * 
+ * @async
+ * @function TreatError
+ * @param {string} message - Error message to display to the user
+ * @returns {Promise<void>}
+ * @example
+ * TreatError("Your session has expired. Please login again.");
+ */
 export const TreatError = async (message) => {
   toast.error(message, {
     icon: mdiAlertCircleOutline,
@@ -55,16 +98,44 @@ export const TreatError = async (message) => {
   LougoutCoookiesSession();
 };
 
+/**
+ * Sorts an array of objects in ascending order by a specified attribute
+ * 
+ * @function sortedAscendingArray
+ * @param {Array<Object>} array - Array of objects to sort
+ * @param {string} att - Attribute name to sort by
+ * @returns {Array<Object>} Sorted array in ascending order
+ * @example
+ * const users = [{name: "John", age: 30}, {name: "Jane", age: 25}];
+ * sortedAscendingArray(users, "age"); // Returns array sorted by age
+ */
 export function sortedAscendingArray(array, att) {
   return array.sort((a, b) => (a[att] > b[att] ? 1 : b[att] > a[att] ? -1 : 0));
 }
 
-//first lettre lowerCase
+/**
+ * Converts the first character of a string to lowercase
+ * 
+ * @function firstToLower
+ * @param {string} chaine - Input string to transform
+ * @returns {string} String with first character in lowercase
+ * @example
+ * firstToLower("Hello"); // Returns "hello"
+ */
 export function firstToLower(chaine) {
   return chaine.charAt(0).toLowerCase() + chaine.slice(1);
 }
 
-//first lettre upperCase and replace _ par space blank
+/**
+ * Formats a string by capitalizing each word and replacing hyphens/underscores with spaces
+ * 
+ * @function formatAndCapitalize
+ * @param {string} string - Input string to format
+ * @returns {string} Formatted string with capitalized words
+ * @example
+ * formatAndCapitalize("hello-world"); // Returns "Hello World"
+ * formatAndCapitalize("user_name"); // Returns "User Name"
+ */
 export function formatAndCapitalize(string) {
   if (!string) return "";
 
@@ -74,7 +145,19 @@ export function formatAndCapitalize(string) {
     .join(" ");
 }
 
-//fonction qui return les nom des icons selons le menu item cliquer
+/**
+ * Returns the appropriate Material Design icon name based on menu item
+ * 
+ * Maps menu identifiers to their corresponding MDI icon names for consistent
+ * UI icon display throughout the application.
+ * 
+ * @function getIcon
+ * @param {string} str - Menu item identifier
+ * @returns {string} MDI icon name (e.g., "mdiHome", "mdiAccount")
+ * @example
+ * getIcon("acceuil"); // Returns "mdiHome"
+ * getIcon("utilisateurs"); // Returns "mdiAccount"
+ */
 export function getIcon(str) {
   switch (str) {
     case "acceuil":
@@ -109,19 +192,53 @@ export function getIcon(str) {
   }
 }
 
+/**
+ * Validates an email address format
+ * 
+ * Uses regex pattern to ensure the email contains:
+ * - Valid characters before @
+ * - @ symbol
+ * - Domain name
+ * - Top-level domain
+ * 
+ * @function validateEmail
+ * @param {string} value - Email address to validate
+ * @returns {boolean} True if email format is valid, false otherwise
+ * @example
+ * validateEmail("user@example.com"); // Returns true
+ * validateEmail("invalid-email"); // Returns false
+ */
 export const validateEmail = (value) => {
   // Expression régulière pour vérifier le format email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(value);
 };
 
+/**
+ * Validates a phone number format (10 digits)
+ * 
+ * @function validatePhone
+ * @param {string} value - Phone number to validate
+ * @returns {boolean} True if phone number has exactly 10 digits, false otherwise
+ * @example
+ * validatePhone("0123456789"); // Returns true
+ * validatePhone("12345"); // Returns false
+ */
 export const validatePhone = (value) => {
   // Vérifier que le numéro contient exactement 10 chiffres
   const phoneRegex = /^\d{10}$/;
   return phoneRegex.test(value);
 };
 
-//formater la date en format francais
+/**
+ * Formats an ISO date string to French date format (DD.MM.YYYY - HH:mm)
+ * 
+ * @function formaterDate
+ * @param {string} dateISO - ISO date string to format
+ * @returns {string|null} Formatted date string or null if input is invalid
+ * @example
+ * formaterDate("2024-01-15T14:30:00Z"); // Returns "15.01.2024 - 14:30"
+ */
 export function formaterDate(dateISO) {
   const date = new Date(dateISO);
   const options = {
@@ -141,13 +258,33 @@ export function formaterDate(dateISO) {
     : null;
 }
 
-// Supprimer un élément d'un tableau d'objets en utilisant son ID
+/**
+ * Removes an element from an array of objects by its ID
+ * 
+ * @function DeleteElementfromArray
+ * @param {Array<Object>} array - Array to filter
+ * @param {*} idElement - ID value of element to remove
+ * @param {string} idName - Name of the ID property
+ * @returns {Array<Object>} New array without the specified element
+ * @example
+ * const users = [{id: 1, name: "John"}, {id: 2, name: "Jane"}];
+ * DeleteElementfromArray(users, 1, "id"); // Returns [{id: 2, name: "Jane"}]
+ */
 export function DeleteElementfromArray(array, idElement, idName) {
   const newTable = array.filter((element) => element[idName] !== idElement);
   return newTable;
 }
 
-//verifier si deux chaine de caractere sont equivalante
+/**
+ * Compares two strings for equality using locale comparison
+ * 
+ * @function TwoEqualeString
+ * @param {string} str1 - First string to compare
+ * @param {string} str2 - Second string to compare
+ * @returns {boolean} True if strings are equal, false otherwise
+ * @example
+ * TwoEqualeString("hello", "hello"); // Returns true
+ */
 export const TwoEqualeString = (str1, str2) => {
   if (str1.localeCompare(str2) === 0) {
     return true;
@@ -156,7 +293,15 @@ export const TwoEqualeString = (str1, str2) => {
   }
 };
 
-//fonction qui return les path
+/**
+ * Returns the appropriate route path for special cases
+ * 
+ * @function getPathRoute
+ * @param {string} str - Route identifier
+ * @returns {string} Formatted route path
+ * @example
+ * getPathRoute("APS AR"); // Returns "Aps-ar"
+ */
 export function getPathRoute(str) {
   switch (str) {
     case "APS AR":
@@ -175,7 +320,15 @@ export function formatString(input) {
     .join(" "); // Rejoint les mots avec des espaces
 }
 
-//transformer une date de chaine de caractere a yne formats date
+/**
+ * Converts a date string to ISO date format (YYYY-MM-DD)
+ * 
+ * @function stringToDate
+ * @param {string} dateString - Date string to convert
+ * @returns {string} ISO formatted date string
+ * @example
+ * stringToDate("2024-01-15-000"); // Returns "2024-01-15"
+ */
 export const stringToDate = (dateString) => {
   const formattedDateString = dateString.slice(0, -4);
   const [year, month, day] = formattedDateString.split("-").map(Number);
@@ -198,7 +351,17 @@ export const getPathName = (str) => {
   }
 };
 
-//extraire la partie @ ipv4 d'une @ ipv6
+/**
+ * Extracts IPv4 address from an IPv6 address
+ * 
+ * Converts IPv6-mapped IPv4 addresses (::ffff:x.x.x.x) to pure IPv4 format
+ * 
+ * @function ipv6ToIpv4
+ * @param {string} ipv6 - IPv6 address string
+ * @returns {string} IPv4 address or original input if not IPv6-mapped
+ * @example
+ * ipv6ToIpv4("::ffff:192.168.1.1"); // Returns "192.168.1.1"
+ */
 export function ipv6ToIpv4(ipv6) {
   if (ipv6?.includes("::ffff:")) {
     const ipv4Part = ipv6.split("::ffff:")[1];
@@ -292,6 +455,24 @@ export function hasTwoWordsSeparatedAndTransform(str) {
   return false;
 }; */
 
+/**
+ * Detects potential SQL injection attempts in user input
+ * 
+ * Scans input for common SQL injection patterns including:
+ * - SQL keywords (SELECT, INSERT, UPDATE, DELETE, DROP, UNION, etc.)
+ * - Malicious comparison operators with OR/AND
+ * - SQL comments (-- and /* * /)
+ * - Suspicious query patterns
+ * 
+ * @function detectSQLInjection
+ * @param {string} input - User input to validate
+ * @returns {boolean} True if potential SQL injection detected, false otherwise
+ * @example
+ * detectSQLInjection("SELECT * FROM users"); // Returns true
+ * detectSQLInjection("normal text"); // Returns false
+ * 
+ * @security This is a critical security function used to prevent SQL injection attacks
+ */
 export const detectSQLInjection = (input) => {
   if (typeof input !== "string" || !input.trim()) return false; // Vérifie aussi si la chaîne est vide
 
@@ -307,6 +488,25 @@ export const detectSQLInjection = (input) => {
   return sqlInjectionPatterns.some((pattern) => pattern.test(input));
 };
 
+/**
+ * Blocks a user account due to security policy violations
+ * 
+ * This function:
+ * 1. Calls backend API to block the user
+ * 2. Displays error notification
+ * 3. Clears all session data
+ * 4. Redirects to login page
+ * 
+ * @async
+ * @function BloquerUser
+ * @param {string} code - Block code identifier
+ * @param {string} api - API endpoint for blocking action
+ * @returns {Promise<void>}
+ * @throws {Error} Displays error toast if block request fails
+ * 
+ * @example
+ * BloquerUser("SQL_INJECTION", "users/block");
+ */
 export const BloquerUser = async (code, api) => {
   try {
     if (!api) {
@@ -406,6 +606,21 @@ export function validateAndCleanString(input) {
   return { isValid, cleanedString };
 }
 
+/**
+ * Decrypts and retrieves a value from localStorage
+ * 
+ * Uses AES encryption to securely store and retrieve sensitive data.
+ * Returns null if key doesn't exist or decryption fails.
+ * 
+ * @function useDecryptedLocalStorage
+ * @param {string} key - localStorage key
+ * @param {string} secretKey - Encryption secret key
+ * @returns {string|null} Decrypted value or null
+ * @example
+ * const username = useDecryptedLocalStorage("username", "secret123");
+ * 
+ * @security Used for secure storage of sensitive user data
+ */
 export const useDecryptedLocalStorage = (key, secretKey) => {
   var value = null;
   const encryptedValue = localStorage.getItem(key);
@@ -417,6 +632,21 @@ export const useDecryptedLocalStorage = (key, secretKey) => {
   return value;
 };
 
+/**
+ * Decrypts URL parameters encrypted with AES
+ * 
+ * Decodes URL-encoded encrypted parameters and returns parsed JSON object.
+ * Returns empty object if decryption fails.
+ * 
+ * @function useDecryptedUrl
+ * @param {string} key - Encrypted URL parameter
+ * @param {string} secretKey - Decryption secret key
+ * @returns {Object} Decrypted and parsed object
+ * @example
+ * const params = useDecryptedUrl(encryptedParam, "secret123");
+ * 
+ * @security Used for secure URL parameter transmission
+ */
 export const useDecryptedUrl = (key, secretKey) => {
   var value = {};
 
